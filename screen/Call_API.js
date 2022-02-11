@@ -10,36 +10,37 @@ const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
 export default Call_API = () => {
   const [isLoading, setLoading] = useState(false);
   const [data, setData] = useState([]);
+  const [get, setGet] = useState('');
   const [Refreshing, setRefreshing] = useState(false);
   const [page,setPage] = useState(1);
   
   useEffect(() => {
     getMovies();
-    console.log(data)
   }, []);
 
   const getMovies = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch('http://192.168.1.96:3000/products/'+page);
-      const json = await response.json();
-      setData(json);
-      if (page<3) {
-        setPage(page+1)
-      } else {
-        setPage(1)
-      }
-    } 
-    catch (error) {
-      console.error(error);
-    } 
-    finally {
-      console.log(data)
-      setTimeout(() => {
-        setLoading(false);
-      }, 1000);
-      
-    }
+        try {
+          setLoading(true);
+          const response = await fetch('http://192.168.1.96:3000/products/'+page);
+          const json = await response.json();
+          console.log(json.total)
+          json.response.map((item, index) => (
+            data.push(item)
+          ))  
+          setData(data)
+          console.log(data)
+          if (page<= json.total) {
+            setPage(page+1)
+          } 
+        } 
+        catch (error) {
+          console.error(error);
+        } 
+        finally {
+          setTimeout(() => {
+            setLoading(false);
+          }, 1000); 
+        }
   }
 
   // const onRefresh = () => {
