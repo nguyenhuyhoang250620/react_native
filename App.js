@@ -19,7 +19,7 @@ import UploadImage from './screen/UploadImage'
 import MaterialTop from './screen/MaterialTop'
 import Locations from './screen/Locations'
 import MaterialBot from './screen/MaterialBot'
-
+import ViewPager from './screen/example/ViewPager';
 
 function CustomDrawerContent(props) {
   return (
@@ -59,6 +59,7 @@ function Root() {
         <Drawer.Screen name="MaterialTop" component={MaterialTop} />
         <Drawer.Screen name="Locations" component={Locations} />
         <Drawer.Screen name="MaterialBot" component={MaterialBot} />
+        <Drawer.Screen name="ViewPager" component={ViewPager} />
     </Drawer.Navigator>
   );
 }
