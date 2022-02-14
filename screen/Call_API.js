@@ -21,7 +21,7 @@ export default Call_API = () => {
   const getMovies = async () => {
         try {
           setLoading(true);
-          const response = await fetch('http://192.168.1.96:3000/products/'+page);
+          const response = await fetch('http://192.168.1.156:3000/products/'+page);
           const json = await response.json();
           console.log(json.total)
           json.response.map((item, index) => (
