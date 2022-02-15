@@ -1,91 +1,113 @@
-import React from 'react';
+import React,{useEffect, useState} from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
-import * as Sharing from 'expo-sharing';
+import { Audio } from 'expo-av';
 
-export default function App() {
-  let [selectedImage, setSelectedImage] = React.useState(null);
 
-  let openImagePickerAsync = async () => {
-    let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
 
-    if (permissionResult.granted === false) {
-      alert('Permission to access camera roll is required!');
-      return;
+export default function Home() {
+
+
+    const [sound,setSound] = useState();
+
+
+    const playSound = async()=>{
+        const {sound} = await Audio.Sound.createAsync(
+            require('./assets/A.mp3')
+        )
+        setSound(sound);
+        await sound.playAsync(); 
+    }
+    const playSounda = async()=>{
+        setColor('#FF00FF')
+        const {sound} = await Audio.Sound.createAsync(
+            require('./assets/B.mp3')
+        )
+        setSound(sound);
+        await sound.playAsync(); 
     }
 
-    let pickerResult = await ImagePicker.launchImageLibraryAsync();
-    if (pickerResult.cancelled === true) {
-      return;
-    }
-
-    setSelectedImage({ localUri: pickerResult.uri });
-  };
-
-  let openShareDialogAsync = async () => {
-    if (!(await Sharing.isAvailableAsync())) {
-      alert(`Uh oh, sharing isn't available on your platform`);
-      return;
-    }
-
-    await Sharing.shareAsync(selectedImage.localUri);
-  };
-
-  if (selectedImage !== null) {
-    return (
-      <View style={styles.container}>
-        <Image source={{ uri: selectedImage.localUri }} style={styles.thumbnail} />
-        <TouchableOpacity onPress={openShareDialogAsync} style={styles.button}>
-          <Text style={styles.buttonText}>Share this photo</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
+    useEffect(() => {
+        return sound
+          ? () => {
+              console.log('Unloading Sound');
+              sound.unloadAsync(); }
+          : undefined;
+      }, [sound]);
 
   return (
-    <View style={styles.container}>
-      <Image source={{ uri: 'https://i.imgur.com/TkIrScD.png' }} style={styles.logo} />
-      <Text style={styles.instructions}>
-        To share a photo from your phone with a friend, just press the button below!
-      </Text>
-
-      <TouchableOpacity onPress={openImagePickerAsync} style={styles.button}>
-        <Text style={styles.buttonText}>Pick a photo</Text>
-      </TouchableOpacity>
+    <View> 
+        <View style={styles.boxa}>
+            <TouchableOpacity style={styles.box}
+            onPress={playSound}
+            >
+                <Text>A</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.box}>
+                <Text>B</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.box}>
+                <Text></Text>
+            </TouchableOpacity>
+        </View>
+        <View style={styles.boxa}>
+            <TouchableOpacity style={styles.box}>
+                <Text></Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.box}>
+                <Text></Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.box}>
+                <Text></Text>
+            </TouchableOpacity>
+        </View>
+        <View style={styles.boxa}>
+            <TouchableOpacity style={styles.box}>
+                <Text></Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.box}>
+                <Text></Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.box}>
+                <Text></Text>
+            </TouchableOpacity>
+        </View>
+        <View style={styles.boxa}>
+            <TouchableOpacity style={styles.box}>
+                <Text></Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.box}>
+                <Text></Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.box}>
+                <Text></Text>
+            </TouchableOpacity>
+        </View>
+        <View style={styles.boxa}>
+            <TouchableOpacity style={styles.box}>
+                <Text></Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.box}>
+                <Text></Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.box}>
+                <Text></Text>
+            </TouchableOpacity>
+        </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  logo: {
-    width: 305,
-    height: 159,
-    marginBottom: 20,
-  },
-  instructions: {
-    color: '#888',
-    fontSize: 18,
-    marginHorizontal: 15,
-    marginBottom: 10,
-  },
-  button: {
-    backgroundColor: 'blue',
-    padding: 20,
-    borderRadius: 5,
-  },
-  buttonText: {
-    fontSize: 20,
-    color: '#fff',
-  },
-  thumbnail: {
-    width: 300,
-    height: 300,
-    resizeMode: 'contain',
-  },
+    box:{
+        borderWidth:1,
+        height:100,
+        width:100,
+        margin:10,
+        backgroundColor:'#FF00FF',
+        alignItems:"center",
+        justifyContent:"center"
+    },
+    boxa:{
+        flexDirection:"row",
+    }
 });

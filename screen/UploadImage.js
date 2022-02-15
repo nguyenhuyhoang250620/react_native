@@ -1,6 +1,7 @@
 import React,{useState} from "react";
-import {View,Text,StyleSheet,Image,Button} from "react-native";
-import * as ImagePicker from 'expo-image-picker'
+import {View,Text,StyleSheet,Image,Button,TouchableOpacity} from "react-native";
+import * as ImagePicker from 'expo-image-picker';
+import * as Sharing from 'expo-sharing';
 
 export default function UploadImage(){
   //đường dẫn hình ảnh
@@ -33,6 +34,13 @@ const openCamera = async()=>{
     console.log(result.uri);
   }
 }
+const shareImage = async()=>{
+  if(!(await Sharing.isAvailableAsync())){
+    alert("chia se khong thanh cong");
+  }
+  await Sharing.shareAsync(pickedImagePath);
+}
+
   return(
     <View style={styles.screen}>
       <View style={styles.button}> 
@@ -48,10 +56,16 @@ const openCamera = async()=>{
       <View style={styles.imageContainer}>
         {
           pickedImagePath !=='' && 
-          <Image
-            source={{uri:pickedImagePath}}
-            style={styles.image}
-          />
+          <View style={styles.viewimg}>
+            <Image
+              source={{uri:pickedImagePath}}
+              style={styles.image}
+            />
+            <Button
+              title="Chia sẻ hình ảnh"
+              onPress={shareImage}
+            />
+          </View>
         }
       </View>
     </View>
@@ -60,8 +74,9 @@ const openCamera = async()=>{
 const styles = StyleSheet.create({
   screen:{
     flex:1,
+    alignItems:"center",
     justifyContent:"center",
-    alignItems:"center"
+    backgroundColor:"#F0FFFF"
   },
   button:{
     width:400,
@@ -69,7 +84,7 @@ const styles = StyleSheet.create({
     justifyContent:"space-around"
   },
   imageContainer:{
-    padding:30
+    padding:30,
   },
   image:{
     width:400,
