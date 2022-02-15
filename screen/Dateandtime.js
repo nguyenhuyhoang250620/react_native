@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Button, Platform,Text,StyleSheet,Image} from 'react-native';
+import {View, Button, Platform,Text,StyleSheet,Image,Alert} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import PagerView from 'react-native-pager-view';
 
@@ -30,6 +30,22 @@ const Dateandtime = () => {
   };
   const changeEvent=()=>{
     setCheck(true)
+  }
+
+  const alert=()=>{
+    Alert.alert(
+      "Lịch đặt phim",
+      "Bạn đã đặt lịch phim thành công: " + " Ngày "+date.getDate() + " Tháng " +date.getMonth()+" Năm "+date.getFullYear(),
+      [
+        {
+          text:"Thoát",
+          style:"cancel"
+        },
+        {
+          text:"Đồng ý",
+        }
+      ]
+    )
   }
   return (
     <View style={styles.body}>
@@ -105,9 +121,7 @@ const Dateandtime = () => {
       </View>
       <View style={styles.btn}>
           <Button 
-            onPress={()=>{
-              alert("Đặt lịch thành công!")
-            }} 
+            onPress={alert} 
             title="Đặt lịch" 
             disabled={check}
           />

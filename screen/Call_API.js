@@ -21,7 +21,7 @@ export default Call_API = () => {
   const getMovies = async () => {
         try {
           setLoading(true);
-          const response = await fetch('http://192.168.1.156:3000/products/'+page);
+          const response = await fetch('http://192.168.1.96:3000/products/'+page);
           const json = await response.json();
           console.log(json.total)
           json.response.map((item, index) => (
@@ -43,30 +43,30 @@ export default Call_API = () => {
         }
   }
 
-  // const onRefresh = () => {
-  //   console.log(page)
-  //   setRefreshing(true);
-  //   getMovies();
-  //   setRefreshing(false);  
-  // }
+  const onRefresh = () => {
+    console.log(page)
+    setRefreshing(true);
+    getMovies();
+    setRefreshing(false);  
+  }
 
   
 
  
-  // const renderItem =({item})=>{
-  //    return(
-  //       <View style={styles.body}>
-  //         <Text style={styles.title}>
-  //         {item.id}.
-  //         {item.name}
-  //       </Text>
-  //       <Image
-  //         source={{uri:item.image,}}
-  //         style={{height:200,width:200}}
-  //       />
-  //       </View>
-  //       )
-  // }
+  const renderItem =({item})=>{
+     return(
+        <View style={styles.body}>
+          <Text style={styles.title}>
+          {item.id}.
+          {item.name}
+        </Text>
+        <Image
+          source={{uri:item.image,}}
+          style={{height:200,width:200}}
+        />
+        </View>
+        )
+  }
 <ActivityIndicator size="large" color="red" />
   return (
     <View style={{ flex: 1, padding: 24,backgroundColor:'#330000' }}>
@@ -76,39 +76,40 @@ export default Call_API = () => {
                   visible={isLoading}
                 />
               ) : (
-                <ScrollView
-                  onScroll={({nativeEvent})=>{
-                    if(isCloseToBottom(nativeEvent)){
-                      getMovies()
-                    }
-                  }}
-                >
-                  {data.map((item, index) => (
-                    <View key={index} style={styles.body}>
-                        <Text style={styles.title}>
-                          {item.id}.
-                          {item.name}
-                        </Text>
-                        <Image
-                          source={{uri:item.image,}}
-                          style={{height:200,width:200}}
-                        />
-                    </View>
-                  ))}
-                </ScrollView>
+                <FlatList
+                  horizontal
+                  data={data}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={renderItem}
+                  refreshControl={
+                    <RefreshControl
+                      onRefresh={onRefresh}
+                      refreshing={Refreshing}
+                      colors={['#ff00ff']}
+                  />
+                  }
+                />
+                // <ScrollView
+                //   onScroll={({nativeEvent})=>{
+                //     if(isCloseToBottom(nativeEvent)){
+                //       getMovies()
+                //     }
+                //   }}
+                // >
+                //   {data.map((item, index) => (
+                //     <View key={index} style={styles.body}>
+                //         <Text style={styles.title}>
+                //           {item.id}.
+                //           {item.name}
+                //         </Text>
+                //         <Image
+                //           source={{uri:item.image,}}
+                //           style={{height:200,width:200}}
+                //         />
+                //     </View>
+                //   ))}
+                // </ScrollView>
               )}    
-        {/* <FlatList
-          data={data}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={renderItem}
-          refreshControl={
-            <RefreshControl
-              onRefresh={onRefresh}
-              refreshing={Refreshing}
-              colors={['#ff00ff']}
-          />
-          }
-        /> */}
     </View>
   );
 };
